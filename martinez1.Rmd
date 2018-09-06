@@ -1,0 +1,54 @@
+---
+title: "BST 682 - Homework 1"
+author: "Ashley I. Martinez, PharmD, MS"
+date: "11 September 2018"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Probability Refreshers
+
+## Problem 1.
+
+> *Uber, AirBnb and Stata have 3000, 1500, and 800 employees, respectively, and 30, 45, and 65 percent of these employees respectively are women. Resignations are equally likely among companies and genders. One woman resigns. What is the probability she worked for Uber?*
+
+## Problem 2.
+> *You flip four fair coins. Assuming the flips are independent, what is the pmf for the number of tails flipped?*
+
+## Problem 3.
+> *Do problem 1.6 (a,b) from our text.*
+
+## Problem 4.
+> *Assume annual rainfall in Lexington is normally distributed with a mean of 40 inches and standard deviation of 4. What is the probability that it takes more than 7 years before having a rainfall over 55 inches? What assumptions are you making?*
+
+\hfill\break
+\hfill\break
+
+# Linear Modeling Refresher
+
+## Problem 5.
+> *Using the data from Table 2.3 Birthweight and gestational age.xls, calculate by matrix algebra the effect estimate resulting from regressing birth weight on gestational age.*
+
+\hfill\break
+\hfill\break
+
+# R Introduction
+
+## Problem 6.
+> *You will inevitably use the Google to problem solve with programming in R – many of you already do. Having go to resources for answering your questions and/or developing new skills can be quite helpful. Search around for what might be (or already is) a resource you will turn to as you improve your R skills. Give the site and url. What, in particular, makes this suitable for you?*
+
+## Problem 7.
+> *Import the data from Table 2.3 Birthweight and gestational age.xls into R. Each observation should be a single row. Tip: I added a second sheet to make this easier if you prefer. Use the Import Dataset functionality in RStudio’s Environment tab and select Sheet 2. This simple example shows why some abhor Excel. . . Tip 2 : Use the readxl package.
+Plot birthweight by age and give each gender a different color on the same plot. Now, do the same plot stratified by gender (Tip: look at the Introduction to R notes). What observations do you have?*
+
+## Problem 8.
+> *Using R and lm, confirm your regression parameter estimate in Problem 5.*
+
+
+
+
+
