@@ -2,6 +2,7 @@
 title: "BST 682 - Homework 1"
 author: "Ashley I. Martinez, PharmD, MS"
 date: "11 September 2018"
+toc: true
 output:
   pdf_document: default
 ---
@@ -10,43 +11,260 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+\pagebreak
+
 # Probability Refreshers
 
 ## Problem 1.
 
 > *Uber, AirBnb and Stata have 3000, 1500, and 800 employees, respectively, and 30, 45, and 65 percent of these employees respectively are women. Resignations are equally likely among companies and genders. One woman resigns. What is the probability she worked for Uber?*
 
+***
+Company       | Women   | Men     | __Total__
+------------- | ------- |-------- |------
+Uber          | 900     | 2100    | __3000__
+AirBNB        | 675     | 825     | __1500__
+Stata         | 520     | 280     | __800__
+__Total__     | __2905__| __3205__|__5300__
+
+
+Using Baye's Theorem:  
+$$P(Uber|Woman) = \frac{P(Uber,Woman)}{P(Woman)}$$
+Thus:  
+$$P(Uber|Woman) = \frac{P(Woman|Uber)~P(Uber)}{[P(Woman|AirBNB)~P(AirBNB)]+[P(Woman|Stata)~P(Stata)]+[P(Woman|Uber)~P(Uber)]}$$
+
+Calculating in R:  
+```{r tidy=TRUE, prompt=TRUE}
+prob_UGivenW <- ((900/3000)*(3000/5300))/(((675/1500)*(1500/5300))+((520/800)*(800/5300))+((900/3000)*(3000/5300)))
+prob_UGivenW
+```
+
+***
+\pagebreak
 ## Problem 2.
 > *You flip four fair coins. Assuming the flips are independent, what is the pmf for the number of tails flipped?*
+
+***
+
+__Definition:__  
+For a discrete random variable $X$ with possible values $x_{1}, x_{2}, x_{3}, . . . , x_{n}$, a probability mass function $f(x_{i})$ is a function such that:
+
+1. $f(x_{i}) \geq 0$
+2. $\sum_{i=1}^nf(x_{i})=1$
+3. $f(x_{i}) = P(X = x_{i})$    
+
+A coin toss follows the binomial distribution. If we let $p$ be the probability of tossing a tails, $n$ be the number of tosses, and $x$ be the number of tails, then the PMF is given by:
+
+$$ P(X=x) = {n\choose x}~p^{x}~(1-p)^{n-x}  $$
+
+Because the $p$ in the case of a coin is 0.5 and in this problem, $n=4$:
+
+$$ P(X=x) = {4\choose x}~0.5^{x}~(0.5)^{4-x} $$
+
+
+
+
+***
 
 ## Problem 3.
 > *Do problem 1.6 (a,b) from our text.*
 
+### Part A. 
+
+Progeny Group | Females | Males   | __Proportion Female__
+------------- | ------- |-------- |------
+1             | 18      | 11      | __`r round(18/(18+11), digits=2)`__
+2             | 31      | 22      | __`r round(31/(31+22), digits=2)`__
+3             | 34      | 27      | __`r round(34/(34+27), digits=2)`__
+4             | 33      | 29      | __`r round(33/(33+29), digits=2)`__
+5             | 27      | 24      | __`r round(27/(27+24), digits=2)`__
+6             | 33      | 29      | __`r round(33/(33+29), digits=2)`__
+7             | 28      | 25      | __`r round(28/(28+25), digits=2)`__
+8             | 23      | 26      | __`r round(23/(23+26), digits=2)`__
+9             | 33      | 38      | __`r round(33/(33+38), digits=2)`__
+10            | 12      | 14      | __`r round(12/(12+14), digits=2)`__
+11            | 19      | 23      | __`r round(19/(19+23), digits=2)`__
+12            | 25      | 31      | __`r round(25/(25+31), digits=2)`__
+13            | 14      | 20      | __`r round(14/(14+20), digits=2)`__
+14            | 4       | 6       | __`r round(4/(4+6), digits=2)`__
+15            | 22      | 34      | __`r round(22/(22+34), digits=2)`__
+16            | 7       | 12      | __`r round(7/(7+12), digits=2)`__
+__Total__     | __363__ | __371__ | __`r round(363/(363+371), digits=2)`__
+
+### Part B.
+We know that for a function $f(y_{i};\theta)$, its likelihood function is $L(\theta;y_{i})$. 
+
+$$ L(\theta)= \prod_{i=1}^n f(y_{i};\theta) = \theta^{y_{1}}(1-\theta)^{n_{1}-y_{1}} ~ \times ~ \theta^{y_{2}}(1-\theta)^{n_{2}-y_{2}} ~ \times ~ \ldots ~ \times ~ \theta^{y_{i}}(1-\theta)^{n_{i}-y_{i}}  $$
+$$ L(\theta) = \theta^{\sum y_{i}}(1-\theta)^{n_{i}-\sum y_{i}}  $$
+
+
+To use calculus to solve for the maximum likelihood estimator, it is easier to use the log-likelihood function, $l(\theta;y_{i})=logL(\theta;y_{i})$.  
+
+
+Thus, it follows that:
+$$ logL(\theta)=(\sum y_{i})log\theta~+~(n_{i}-\sum y_{i})log(1-\theta) $$
+
+Using the convenient properties of the natural log, we take the derivative and set it to zero.
+
+$$ \frac {\delta~logL(\theta)}{\delta\theta} = \frac{\sum y_{i}}{\theta} - \frac{n_{i}- \sum y_{i}}{1-\theta}~ \equiv~0  $$
+
+Multiply through by $\frac{\theta}{1-\theta}$:
+$$ (\sum y_{i})(1-\theta)~-~(n_{i}-\sum y_{i})(\theta)  $$
+$$ (\sum y_{i})~-~n_{i}\theta \equiv0   $$
+$$\hat{\theta}=\frac{\sum y_{i}}{n_{i}}$$
+  
+Then, to evaluate the maximum likelihood estimator, $\hat{\theta}$ for these data:
+
+$$ \hat{\theta}=\frac{(18+31+34+33+27+33+28+23+33+12+19+25+14+4+22+7)}{734}=0.49 $$
+
+***
+\pagebreak
+
 ## Problem 4.
 > *Assume annual rainfall in Lexington is normally distributed with a mean of 40 inches and standard deviation of 4. What is the probability that it takes more than 7 years before having a rainfall over 55 inches? What assumptions are you making?*
 
-\hfill\break
-\hfill\break
+***
+
+For this question, we want to know the probability that for 7 consecutive years, the rainfall is $\le$ 55".
+
+Thus,  
+
+$$ P(rainfall \le 55")^7 ~=~ \Phi(\frac{55-40}{4})^7~=~\Phi(3.75)^7~\approx~(`r round(pnorm(55,40,4),digits=4)`)^7$$
+
+
+__\underline{Assumptions}__  
+
+* Rainfall in different years are independent of each other 
+* Let $X$ denote the annual rainfall in any given year 
+  + Let $X$ be a normally distributed continuous random variable with parameters $\mu$ and $\sigma^2$
+* $P(X\le a)=\Phi(\frac{a-\mu}{\sigma})$, where $\Phi(x)$ is the cumulative distribution function
+
+
+***
+
+\pagebreak
 
 # Linear Modeling Refresher
 
 ## Problem 5.
 > *Using the data from Table 2.3 Birthweight and gestational age.xls, calculate by matrix algebra the effect estimate resulting from regressing birth weight on gestational age.*
 
-\hfill\break
-\hfill\break
+***
+
+First, we will import the data which is available on the publisher's website for download.\
+``` {r}
+# read in the first worksheet from the workbook 
+# first row contains variable names
+birthweight <- read.csv(file="t2-3_birthweight.csv", header=TRUE, sep=",")
+```
+Now, we need to make that worksheet into two matrices: one containing the regressor data and one containing the age.\
+``` {r}
+
+## Create X and Y matrices for this specific regression. 
+X = as.matrix(cbind(1,birthweight$gestational.age)) 
+Y = as.matrix(birthweight$birth.weight)
+```
+Then, we use matrix algebra to give us a matrix of estimated coefficients ($\hat\beta$)that minimizes the sum of squared residuals. We label this data so the output makes sense.\
+```{r}
+## Choose beta-hat to minimize the sum of squared residuals
+## resulting in matrix of estimated coefficients:
+bh = round(solve(t(X)%*%X)%*%t(X)%*%Y, digits=2)
+
+## Label and organize results into a data frame
+beta.hat = as.data.frame(cbind(c("Intercept","Age"),bh))
+names(beta.hat) = c("Coeff.","Est")
+beta.hat
+```
+We can now use the built-in R function, $lm()$ to verify that we have obtained a correct effect estimate.
+```{r}
+lm(birth.weight ~ gestational.age, birthweight)
+```
+
+***
 
 # R Introduction
 
 ## Problem 6.
 > *You will inevitably use the Google to problem solve with programming in R – many of you already do. Having go to resources for answering your questions and/or developing new skills can be quite helpful. Search around for what might be (or already is) a resource you will turn to as you improve your R skills. Give the site and url. What, in particular, makes this suitable for you?*
 
+***
+
+I've definitely been using the Internet to help me with this homework assignment, as this is the first time I've ever used R. What I've been doing is entering a query into Google, like "rmarkdown insert line break," and then I'll usually click through the first few top results. I've been finding myself on StackOverflow quite a bit (https://stackoverflow.com/questions/tagged/r). I like that because I've often found that people link to more important resources in the comments.\
+
+I also like the "Quick-R" resource from StatsMethods (https://statsmethods.net). They have different topics divided into separate sections, each with detailed examples.
+
+***
+
+
 ## Problem 7.
 > *Import the data from Table 2.3 Birthweight and gestational age.xls into R. Each observation should be a single row. Tip: I added a second sheet to make this easier if you prefer. Use the Import Dataset functionality in RStudio’s Environment tab and select Sheet 2. This simple example shows why some abhor Excel. . . Tip 2 : Use the readxl package.
 Plot birthweight by age and give each gender a different color on the same plot. Now, do the same plot stratified by gender (Tip: look at the Introduction to R notes). What observations do you have?*
 
+***
+
+I downloaded the file from the publisher's website (https://www.crcpress.com/An-Introduction-to-Generalized-Linear-Models/Dobson-Barnett/p/book/9781138741515), since I couldn't find it on Canvas anywhere. It was formatted quite strangely, with multiple headers and really two tables in the first sheet. So, I used the $readxl$ package to specify that I only wanted the latter 3 columns that had the actual information in them, using the following code:\
+```{r}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+
+library(readxl)
+gestationalage <- read_excel("/Users/ashleymartinez/Dropbox/UK/PhD/Terms/Autumn\ 2018/BST682/Data/t2-3_birthweight.xls", range = cell_cols("G:I"))
+```
+But then, of course, I still had problems. The first was that it actually imported as a tibble instead of a data frame, so I had to first convert it to a data frame. Additionally, the column headers had spaces in them, which I knew would cause me trouble, so I went ahead and renamed the columns, too (along with the values for sex).\
+```{r}
+#Look at the imported data 
+head(gestationalage)
+
+# Change it into a dataframe
+df <- as.data.frame(gestationalage)
+
+# Rename the columns
+names(df)=c("age","weight","sex")
+
+# Replace the numbers in sex with logical values 
+df$sex[df$sex==1] <- "Male"
+df$sex[df$sex==2] <- "Female"
+
+```
+Then, I use the function $ggplot2$ to create a plot that would show the relationship between gestational age and weight by sex.\
+```{r}
+library(easyGgplot2)
+weight_age <- ggplot2.scatterplot(data=df, xName='age',yName='weight',groupName = "sex")
+ggplot2.customize(weight_age,backgroundColor = "white",mainTitle="Birth Weight\nAccording to Gestational Age",xtitle="Gestational Age (weeks)",ytitle="Birth Weight (grams)")
+```
+I can also stratify by sex in two different  plots.\
+```{r}
+# First, subset my data into males and female
+attach(df)
+df_female <- df[ which(sex=='Female'),]
+detach(df)
+
+attach(df)
+df_male <- df[ which(sex=='Male'),]
+detach(df)
+
+# Now plot them on separate plots using the multiplot function from ggplot2
+library(easyGgplot2)
+weight_age_female <- ggplot2.scatterplot(data=df_female, xName='age',yName='weight',mainTitle="Birth Weight by Gestational Age\nfor Females")
+weight_age_male <- ggplot2.scatterplot(data=df_male, xName='age',yName='weight',mainTitle="Birth Weight by Gestational Age\nfor Males")
+weight_age_stratify <- ggplot2.multiplot(weight_age_female, weight_age_male, cols = 2)
+```
+
+***
+
 ## Problem 8.
 > *Using R and lm, confirm your regression parameter estimate in Problem 5.*
+
+***
+
+I already did this; see problem #5.
+
+***
 
 
 
